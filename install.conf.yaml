@@ -1,0 +1,20 @@
+- clean:
+    - '~'
+- shell:
+    - [mkdir -p ~/.config, Making sure that ~/.config exists]
+    - [mkdir -p ~/Pictures, Making sure that ~/Pictures exists]
+    - [git submodule update --init --recursive]
+
+- link:
+    ~/.gitconfig: gitconfig
+    ~/.zshrc: zshrc
+    ~/.Xmodmap: Xmodmap 
+    ~/.xbindkeysrc: xbindkeysrc
+    ~/.config/i3: i3
+    ~/.config/nvim/init.vim: vim/vimrc
+    ~/.config/nvim/colors: vim/colors
+    ~/.config/nvim/autoload: vim/autoload
+    ~/.config/polybar: polybar/
+    ~/.config/compton.conf: compton.conf
+    ~/shell_scripts: shell_scripts
+    ~/Pictures/wallpapers: wallpapers

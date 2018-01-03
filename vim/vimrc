@@ -1,0 +1,237 @@
+if has("unix")
+  let s:uname = system("uname")
+  if s:uname == "Darwin\n"
+      let g:python2_host_prog = '/usr/local/bin/python'
+      let g:python3_host_prog = '/usr/local/bin/python3'
+  endif
+endif
+set t_Co=256
+
+" ---------------------- PLUGIN CONFIGURATION ----------------------
+" initiate Plug GET PLUG!
+" curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+"    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+call plug#begin('~/.vim/plugged')
+
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
+Plug 'mattn/emmet-vim'
+Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
+Plug 'Raimondi/delimitMate'
+Plug 'scrooloose/nerdcommenter'
+Plug 'benekastah/neomake'
+Plug 'sheerun/vim-polyglot'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'bling/vim-airline'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+Plug 'romainl/vim-qf'
+Plug 'Galooshi/vim-import-js'
+Plug 'ap/vim-css-color'
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown'] }
+Plug 'flowtype/vim-flow'
+Plug 'fatih/vim-go'
+
+
+" end plugin definition
+call plug#end()
+
+colorscheme robinCustom
+filetype plugin indent on
+syntax on
+
+set guifont=Monospace\ 12
+set autoread
+set ls=1
+set expandtab
+set tabstop=2
+set shiftwidth=2
+set softtabstop=2
+autocmd Filetype python setlocal ts=4 sw=4 sts=4 expandtab
+set smarttab
+set ruler
+set number
+set ignorecase
+set smartcase
+set modeline
+set nobackup
+set wrap
+set hidden
+set backspace=indent,eol,start
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*/node_modules/*     " MacOSX/Linux
+set lazyredraw
+set backupcopy=yes
+
+" Escape special characters in a string for exact matching.
+" This is useful to copying strings from the file to the search tool
+" Based on this - http://peterodding.com/code/vim/profile/autoload/xolox/escape.vim
+function! EscapeString (string)
+  let string=a:string
+  " Escape regex characters
+  let string = escape(string, '^$.*\/~[]')
+  " Escape the line endings
+  let string = substitute(string, '\n', '\\n', 'g')
+  return string
+endfunction
+
+" Get the current visual block for search and replaces
+" This function passed the visual block through a string escape function
+" Based on this - http://stackoverflow.com/questions/676600/vim-replace-selected-text/677918#677918
+function! GetVisual() range
+  " Save the current register and clipboard
+  let reg_save = getreg('"')
+  let regtype_save = getregtype('"')
+  let cb_save = &clipboard
+  set clipboard&
+
+  " Put the current visual selection in the " register
+  normal! ""gvy
+  let selection = getreg('"')
+
+  " Put the saved registers and clipboards back
+  call setreg('"', reg_save, regtype_save)
+  let &clipboard = cb_save
+
+  "Escape any special characters in the selection
+  let escaped_selection = EscapeString(selection)
+
+  return escaped_selection
+endfunction
+
+" Start the find and replace command across the entire file
+vmap <C-r> <Esc>:%s/<c-r>=GetVisual()<cr>/
+
+"Allows for ctrl-s for save rather than always having to use :w"
+"NEED TO PUT IN THIS into zshrc, the single quotes are double, and no square
+"brackets:  [vim() STTY=-ixon command vim '$@'] "
+
+noremap <silent> <C-S>          :w<CR>
+vnoremap <silent> <C-S>         :w<CR>
+inoremap <silent> <C-S>       <ESC>:w<CR>
+
+
+let delimitMate_expand_cr = 1
+"Makes the arrow keys useful"
+nnoremap <C-Right> :vertical resize -2<CR>
+nnoremap <C-Left> :vertical resize +2<CR>
+nnoremap <C-Up> :resize -2<CR>
+nnoremap <C-Down> :resize +2<CR>
+nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
+"nnoremap <Tab> :bnext<CR>
+"nnoremap <S-Tab> :bprevious<CR>
+nnoremap <c-q> :close<CR>
+nnoremap <C-S-n> :cnfile<CR>
+nnoremap <C-S-p> :cpfile<CR>
+" Maps F3 to grep! visual selection as well as a under word selection
+nnoremap <F3> :Ag <C-R><C-W><CR>
+vnoremap <F3> y:Ag <C-R>"<CR>
+nnoremap <F4> :FlowType <CR>
+nnoremap <F5> :FlowJumpToDef <CR>
+command Openfx !open %:p:h &
+nnoremap <c-n> :lne<CR>
+nnoremap <c-p> :lpr<CR>
+
+
+"Abbreviating grep to grep!
+cnoreabbrev grep grep!
+
+"Custom colorscheme editting purposes. Determine word type/syntax highlightening category for colorscheme use.
+map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+set undofile
+set undodir=~/.vim/undodir
+
+nnoremap \b :Buffers<CR>
+nnoremap \t :Files<CR>
+autocmd! BufWritePost * Neomake
+
+let g:neomake_python_pep8_maker = {
+    \ 'args': ['--ignore=W503',  '--format=default'],
+    \ }
+
+let g:jsx_ext_required = 0 " Allow JSX in normal JS files
+let g:neomake_javascript_enabled_makers = ['eslint', 'flow']
+let g:neomake_open_list = 2
+let g:neomake_jsx_enabled_makers = ['flow']
+let g:neomake_python_enabled_makers = ['flake8', 'pylint', 'pep8']
+let g:neomake_scss_enabled_makers = ['stylelint']
+" debugging
+let g:neomake_verbose = 3
+let s:eslint_path = system('PATH=$(npm bin):$PATH && which eslint')
+let s:stylelint_path = system('PATH=$(npm bin):$PATH && which stylelint')
+
+let g:neomake_javascript_eslint_exe = substitute(s:eslint_path, '^\n*\s*\(.\{-}\)\n*\s*$', '\1', '')
+let g:neomake_scss_stylelint_exe = substitute(s:stylelint_path, '^\n*\s*\(.\{-}\)\n*\s*$', '\1', '')
+
+"let g:tomorrow = 1
+"let g:airline#extensions#tabline#enabled = 1
+"let g:airline#extensions#tabline#fnamemod = ':p:t'
+let g:airline_section_b = ''
+let g:airline_section_c = airline#section#create(['file'])
+let g:airline_section_x = ''
+let g:airline_section_y = ''
+let g:airline_section_warning = ''
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+
+let g:deoplete#file#enable_buffer_path = 1
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#enable_at_startup = 1
+
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+
+let g:loaded_sql_completion = 0
+
+au FileType go nmap <leader>r <Plug>(go-run)
+au BufRead /tmp/psql.edit.* set syntax=sql
+
+
+" ripgrep
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+
+augroup myvimrc
+    autocmd!
+    autocmd QuickFixCmdPost [^l]* cwindow
+    autocmd QuickFixCmdPost l*    lwindow
+augroup END
+let g:qf_loclist_window_bottom=0
+let g:qf_auto_resize=0
+let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+" CTRL-A CTRL-Q to select all and build quickfix list
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  copen
+  cc
+endfunction
+
+let g:fzf_action = {
+  \ 'ctrl-q': function('s:build_quickfix_list'),
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
+let $FZF_DEFAULT_OPTS = '--bind ctrl-a:select-all'
+let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
+set guicursor=
+let g:flow#autoclose = 1
+let g:flow#enable = 0
+let g:go_fmt_command = "goimports"
+let g:prettier#exec_cmd_async = 1
+let g:prettier#autoformat = 0
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md Prettier
+
