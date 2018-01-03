@@ -207,6 +207,17 @@ client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-col
 client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color $bg-color
 client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          $bg-color
 
+#############################
+### settings for i3-gaps: ###
+#############################
+
+# Set inner/outer gaps
+gaps inner 10
+gaps outer 2
+
+# Smart gaps (gaps used if only more than one container on the workspace)
+smart_gaps on
+
 
 new_window pixel 0
 hide_edge_borders smart
