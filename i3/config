@@ -45,7 +45,7 @@ font pango:System San Francisco Display 10
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec terminator --working-directory=$(xcwd)
+bindsym $mod+Return exec terminator --working-directory=$(xcwd) -p tommorowNight
 
 # kill focused window
 bindsym $mod+Shift+q kill

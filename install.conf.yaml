@@ -10,11 +10,12 @@
     ~/.zshrc: zshrc
     ~/.Xmodmap: Xmodmap 
     ~/.xbindkeysrc: xbindkeysrc
-    ~/.config/i3: i3
+    ~/.config/i3: i3/
     ~/.config/nvim/init.vim: vim/vimrc
     ~/.config/nvim/colors: vim/colors
     ~/.config/nvim/autoload: vim/autoload
     ~/.config/polybar: polybar/
+    ~/.config/terminator: terminator/
     ~/.config/compton.conf: compton.conf
-    ~/shell_scripts: shell_scripts
-    ~/Pictures/wallpapers: wallpapers
+    ~/shell_scripts: shell_scripts/
+    ~/Pictures/wallpapers: wallpapers/
