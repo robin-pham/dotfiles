@@ -228,7 +228,7 @@ card = intel_backlight
 [module/cpu]
 type = internal/cpu
 interval = 2
-format-prefix = " "
+format-prefix = "🌡 "
 format-prefix-foreground = ${colors.foreground-alt}
 format-underline = ${colors.red}
 label = CPU %percentage%%
@@ -251,7 +251,7 @@ format-disconnected-underline = ${colors.green}
 format-connected-underline = ${colors.green}
 
 format-connected = %{A1:networkmanager_dmenu:}<label-connected>%{A}
-label-connected = " %downspeed%  %upspeed%"
+label-connected = "⇓ %downspeed% ⇑ %upspeed%"
 
 format-disconnected = %{A1:networkmanager_dmenu:}<label-disconnected>%{A}
 ;format-disconnected-underline = ${self.format-connected-underline}

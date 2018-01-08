@@ -225,7 +225,8 @@ hide_edge_borders smart
 exec --no-startup-id compton --config ~/.config/compton.conf
 exec --no-startup-id fluxgui
 # exec --no-startup-id polybar main 
-exec --no-startup-id xss-lock -- ~/shell_scripts/lock.sh
 exec --no-startup-id betterlockscreen -u ~/Pictures/wallpapers
 exec --no-startup-id betterlockscreen -w
 exec --no-startup-id mate-power-manager
+exec --no-startup-id rescuetime
+exec --no-startup-id xss-lock -- ~/shell_scripts/lock.sh
