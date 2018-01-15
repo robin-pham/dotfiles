@@ -19,6 +19,7 @@ let s:blue = "99cccc"
 let s:fadedBlue= "759c9c"
 let s:black = "000000"
 let s:searchBG = "7aa6a6"
+let s:diffBG = "3d3c3c"
 let s:purple = "cc99cc"
 let s:skin= "ccb499"
 let s:window = "4d5057"
@@ -365,8 +366,10 @@ if has("gui_running") || &t_Co == 88 || &t_Co == 256
 	call <SID>X("xmlEndTag", s:fadedBlue, "", "")
 
 	" Diff Highlighting
-	call <SID>X("diffAdded", s:green, "", "")
-	call <SID>X("diffRemoved", s:red, "", "")
+	call <SID>X("DiffText", s:green, s:diffBG, "")
+	call <SID>X("DiffChange", s:blue, s:diffBG, "")
+	call <SID>X("DiffAdd", s:green, s:diffBG, "")
+	call <SID>X("DiffDelete", s:red, s:diffBG, "")
 
 	" Delete Functions
 	delf <SID>X
